@@ -26,7 +26,8 @@ class SpeakerDatasetTIMIT(Dataset):
         else:
             self.path = hp.data.test_path_unprocessed
             self.utterance_number = hp.test.M
-        self.speakers = glob.glob(os.path.dirname(self.path))
+        # self.speakers = glob.glob(os.path.dirname(self.path))
+        self.speakers = glob.glob(self.path.split('*')[0] + '/*/')
         shuffle(self.speakers)
         
     def __len__(self):
@@ -35,7 +36,8 @@ class SpeakerDatasetTIMIT(Dataset):
     def __getitem__(self, idx):
         
         speaker = self.speakers[idx]
-        wav_files = glob.glob(speaker+'/*.WAV')
+        # wav_files = glob.glob(speaker+'/*.WAV')
+        wav_files = glob.glob(speaker+'/*/*.wav')
         shuffle(wav_files)
         wav_files = wav_files[0:self.utterance_number]
         
