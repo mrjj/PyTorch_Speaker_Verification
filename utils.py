@@ -7,11 +7,14 @@ Created on Thu Sep 20 16:56:19 2018
 """
 import librosa
 import numpy as np
+import random
 import torch
 import torch.autograd as grad
 import torch.nn.functional as F
 
 from hparam import hparam as hp
+
+random.seed(12345)
 
 def get_centroids(embeddings):
     centroids = []
@@ -68,7 +71,11 @@ def mfccs_and_spec(wav_file, wav_process = False, calc_mfccs=False, calc_mag_db=
     if wav_process == True:
         sound_file, index = librosa.effects.trim(sound_file, frame_length=window_length, hop_length=hop_length)
         length = int(hp.data.sr * duration)
-        sound_file = librosa.util.fix_length(sound_file, length)
+
+        offset = sound_file.shape[0] - length
+        start_time = random.choice(range(offset)) if offset > 0 else 0
+
+        sound_file = librosa.util.fix_length(sound_file[start_time:], length)
         
     spec = librosa.stft(sound_file, n_fft=hp.data.nfft, hop_length=hop_length, win_length=window_length)
     mag_spec = np.abs(spec)
