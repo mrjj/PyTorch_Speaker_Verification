@@ -14,7 +14,7 @@ from utils import get_centroids, get_cossim, calc_loss
 
 class SpeechEmbedder(nn.Module):
     
-    def __init__(self):
+    def __init__(self, embedding_size=hp.model.proj):
         super(SpeechEmbedder, self).__init__()    
         self.LSTM_stack = nn.LSTM(hp.data.nmels, hp.model.hidden, num_layers=hp.model.num_layer, batch_first=True)
         for name, param in self.LSTM_stack.named_parameters():
@@ -22,7 +22,8 @@ class SpeechEmbedder(nn.Module):
              nn.init.constant_(param, 0.0)
           elif 'weight' in name:
              nn.init.xavier_normal_(param)
-        self.projection = nn.Linear(hp.model.hidden, hp.model.proj)
+        # self.projection = nn.Linear(hp.model.hidden, hp.model.proj)
+        self.projection = nn.Linear(hp.model.hidden, embedding_size)
         
     def forward(self, x):
         x, _ = self.LSTM_stack(x.float()) #(batch, frames, n_mels)
