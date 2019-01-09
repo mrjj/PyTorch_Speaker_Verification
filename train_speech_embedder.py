@@ -60,7 +60,7 @@ def train(model_path, tensorboard_writer):
         print('==> epochs', e)
 
         total_loss = 0
-        for batch_id, mel_db_batch in enumerate(train_loader): # mel_db_batch: (frames, batch, num_mels)
+        for batch_id, mel_db_batch in enumerate(train_loader): 
             mel_db_batch = mel_db_batch.to(device)
             
             mel_db_batch = torch.reshape(mel_db_batch, (hp.train.N*hp.train.M, mel_db_batch.size(2), mel_db_batch.size(3)))
@@ -188,7 +188,7 @@ def test(model_path, embedder_net=None, test_loader=None):
             
             enrollment_embeddings = torch.reshape(enrollment_embeddings, (hp.test.N, int(hp.test.M/2), enrollment_embeddings.size(1)))
             verification_embeddings = torch.reshape(verification_embeddings, (hp.test.N, int(hp.test.M/2), verification_embeddings.size(1)))
-            
+
             enrollment_centroids = get_centroids(enrollment_embeddings)
 
             sim_matrix = get_cossim(verification_embeddings, enrollment_centroids)
