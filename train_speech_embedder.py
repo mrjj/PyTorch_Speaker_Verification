@@ -12,7 +12,6 @@ import time
 import torch
 from torch.utils.data import DataLoader
 from tqdm import tqdm
-
 # from tensorboard_logger import configure, log_value
 from tensorboardX import SummaryWriter
 
@@ -129,6 +128,14 @@ def train(model_path, tensorboard_writer):
 
         embedder_net.to(device).train()
         
+            # avg_EER = test(model_path)
+            # if avg_EER < best_EER:
+            #     embedder_net.eval().cpu()
+            #     ckpt_model_filename = "best.pth"
+            #     ckpt_model_path = os.path.join(hp.train.checkpoint_dir, ckpt_model_filename)
+            #     torch.save(embedder_net.state_dict(), ckpt_model_path)
+            #     embedder_net.to(device).train()
+
     #save model
     embedder_net.eval()
     # save_model_filename = "final_epoch_" + str(e + 1) + "_batch_id_" + str(batch_id + 1) + ".model"
