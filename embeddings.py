@@ -3,6 +3,7 @@ import glob
 import math
 import numpy as np
 import os
+import pandas as pd
 import random
 import torch
 from torch.utils.data import DataLoader, Dataset
@@ -18,6 +19,17 @@ random.seed(12345)
 class EmbedSet(Dataset):
     def __init__(self, audio_path):
         self.path = audio_path
+
+        if audio_path.endswith('.wav'):
+            self.audio_list = [audio_path]
+            return
+
+        if audio_path.endswith('.csv'):
+            self.audio_list = pd.read_csv(audio_path, names=['path'])['path'].values.tolist()
+
+            # with open(audio_path, 'r') as f:
+            #     self.audio_list = [line.strip() for line in f.readlines() if line.strip()]
+            return
 
         self.audio_list = []
         for root, dirs, files in os.walk(audio_path):
